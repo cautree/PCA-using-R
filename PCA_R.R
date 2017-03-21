@@ -70,3 +70,46 @@ PC = predict(trans, iris[,1:4])
 head(PC, 3)
 # Loadings
 trans$rotation
+
+#########################################################
+#more PCA
+iris_2 = iris[,1:4]
+#center =TRUE is highly recommended
+pr.iris_2 = prcomp(x=iris_2, scale=FALSE, center =TRUE)
+summary(pr.iris_2) # explains how much each component explains the variance
+
+pr.iris = prcomp(x=iris[-5], scale = FALSE, center=TRUE)
+#biplot() function plots both the principal components loadings and the mapping of the observations 
+#to their first two principal component values. 
+biplot(pr.iris)
+
+#get proportions of variance for a scree plot
+pr.var = pr.iris$sdev^2
+pve = pr.var/sum(pr.var)
+
+plot(pve, xlab= "Principle Component",
+     ylab="proportion of Variance explained",
+     ylim=c(0,1), type="b")
+
+# Plot cumulative proportion of variance explained
+plot(cumsum(pve), xlab = "Principal Component",
+     ylab = "Cummulative Proportion of Variance Explained",
+     ylim = c(0, 1), type = "b")
+
+
+# Mean of each variable
+colMeans(pokemon)
+
+# Standard deviation of each variable
+apply(pokemon, 2, sd)
+
+# PCA model with scaling: pr.with.scaling
+pr.with.scaling=prcomp(pokemon, scale = TRUE, center=TRUE)
+
+# PCA model without scaling: pr.without.scaling
+pr.without.scaling = prcomp(pokemon, scale=FALSE)
+
+# Create biplots of both for comparison
+par(mfrow = c(1, 2))
+biplot(pr.with.scaling)
+biplot(pr.without.scaling)
